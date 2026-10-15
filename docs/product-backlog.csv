@@ -1,0 +1,15 @@
+ID,Historia,Prioridad,Puntos,Sprint,Estado
+PB-01,Como visitante quiero ver servicios y equipos para decidir si contacto a TecnoSol,Alta,5,1,Hecho
+PB-02,Como cliente quiero pedir cotización por WhatsApp desde un formulario,Alta,3,1,Hecho
+PB-03,Como dueño quiero que Google encuentre cada página (SEO on-page y sitemap),Alta,5,1,Hecho
+PB-04,Como visitante móvil quiero un menú adaptable y modo oscuro,Media,3,1,Hecho
+PB-05,Como estudiante quiero filtrar el catálogo y cotizar el producto elegido,Media,3,1,Hecho
+PB-06,Como equipo quiero un repositorio Git con ramas y plantillas de PR e issues,Alta,2,2,Listo para validar
+PB-07,Como equipo quiero validar el HTML automáticamente en cada cambio,Alta,3,2,Listo para validar
+PB-08,Como equipo quiero detectar secretos y vulnerabilidades antes de desplegar,Alta,5,2,Listo para validar
+PB-09,Como equipo quiero empaquetar el sitio en un contenedor reproducible,Alta,3,2,Listo para validar
+PB-10,Como equipo quiero publicar la imagen automáticamente desde main,Media,5,2,Listo para validar
+PB-11,Como dueño quiero saber si el sitio cae y cuánto tráfico recibe,Media,5,3,Por hacer
+PB-12,Como dueño quiero medir solicitudes de cotización por canal,Media,3,3,Por hacer
+PB-13,Como dueño quiero PageSpeed móvil de 90 o más,Media,5,3,Por hacer
+PB-14,Como dueño quiero una campaña Google Ads con seguimiento de CPA,Baja,8,Backlog,Por hacer

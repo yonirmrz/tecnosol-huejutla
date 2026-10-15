@@ -1,0 +1,63 @@
+name: CI-CD
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+
+jobs:
+  quality:            # Shift Left: calidad y secretos antes de construir
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Validar HTML
+        run: npx --yes htmlhint@1.1.4 "*.html"
+      - name: Buscar secretos en el repositorio
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-scan:         # Contenedor + análisis de vulnerabilidades + prueba de humo
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Construir imagen
+        run: docker build -t tecnosol-huejutla:${{ github.sha }} .
+      - name: Escanear imagen con Trivy
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: tecnosol-huejutla:${{ github.sha }}
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+      - name: Prueba de humo
+        run: |
+          docker run -d --name web -p 8080:8080 tecnosol-huejutla:${{ github.sha }}
+          sleep 3
+          curl -fsS http://localhost:8080/healthz
+          curl -fsS http://localhost:8080/servicios.html | grep -q "<title>"
+
+  publish:            # CD: solo desde main
+    needs: build-scan
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/tecnosol-huejutla:latest
+            ghcr.io/${{ github.repository_owner }}/tecnosol-huejutla:${{ github.sha }}
