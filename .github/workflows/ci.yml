@@ -27,7 +27,7 @@ jobs:
       - name: Construir imagen
         run: docker build -t tecnosol-huejutla:${{ github.sha }} .
       - name: Escanear imagen con Trivy
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.20.0
         with:
           image-ref: tecnosol-huejutla:${{ github.sha }}
           severity: HIGH,CRITICAL
